@@ -14,12 +14,13 @@ $ source venv/bin/activate
 (venv) $ pip install pyyaml
 (venv) $ pip install .
 
+
 # CLI examples
 
 $ py-oas-edit --help
 
 Shows available commands and their options. Currently only 'delete' is supported with option '-H'
 
-$ py-oas-edit delete -H api_key input.yaml output.yaml
+$ py-oas-edit delete -H nameofheader input.yaml output.yaml
 
-Takes input.yaml, deletes all headers with name 'api_key' and writes the new contents to output.yaml. The input file is not affected.
+Takes input.yaml, deletes all headers with name 'nameofheader' and writes the new contents to output.yaml. The input file is not affected.
