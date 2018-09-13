@@ -8,11 +8,11 @@ oas or swagger as input and removes specified elements.
 
 To install the cli following these steps:
 
-$ pip install --upgrade virtualenv
-$ virtualenv venv
-$ source venv/bin/activate
-(venv) $ pip install pyyaml
-(venv) $ pip install .
+$ pip install --upgrade virtualenv  
+$ virtualenv venv  
+$ source venv/bin/activate  
+(venv) $ pip install pyyaml  
+(venv) $ pip install .  
 
 
 # CLI examples
