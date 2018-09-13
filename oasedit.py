@@ -25,7 +25,7 @@ def cli(config, verbose):
 def delete(config, header, path, query, input, output):
     '''Delete parameters from swagger file'''
     
-    print('verbose mode: ', pass_config.verbose)
+    #print('verbose mode: ', pass_config.verbose)
         
     if (header):
         s = oas.OpenAPISpec(input)    
