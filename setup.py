@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='Open API specification editor',
     version='0.1.0',
-    py_modules=['oas-edit'],
+    py_modules=['oas'],
     install_requires=[
         'Click',
         'PyYaml'

@@ -6,7 +6,7 @@ oas or swagger as input and removes specified elements.
 
 # Install
 
-To install the cli following these steps:
+To install the cli these steps:
 
 $ pip install --upgrade virtualenv  
 $ virtualenv venv  
