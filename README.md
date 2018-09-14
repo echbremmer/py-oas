@@ -12,7 +12,7 @@ $ pip install --upgrade virtualenv
 $ virtualenv venv  
 $ source venv/bin/activate  
 (venv) $ pip install pyyaml  
-(venv) $ pip install .  
+(venv) $ pip install --editable .  
 
 
 # CLI examples
