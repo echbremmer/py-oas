@@ -19,7 +19,7 @@ $ source venv/bin/activate
 
 $ py-oas-edit --help
 
-Shows available commands and their options. Currently only 'delete' is supported with option '-H'
+Shows available commands and their options. Currently only 'delete' is supported for parameters in the oas/swagger file (parameters: header, query, path and cookie)
 
 $ py-oas-edit delete -H nameofheader input.yaml output.yaml
 
