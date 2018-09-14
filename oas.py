@@ -1,53 +1,43 @@
 ''' Class representing a oas/swagger file
 
-todo: 
-- else statements for all if
-- maybe remove first if (no code is executed anyway)
-- double check doc standards
-- make listlen > 0 part of the main elif
-- in 'delete_parameter' include a check for the 'type' (i.e "in" == type)
-- how to handle security definitions (e.g. give error or remove them)
+todo:
 - remove items related to headers: e.g. security definitions and security
   within the operation itself
-- make it support other stuff then just headers; e.g. start with similar stuff
-  like path, body
-- ability to add headers
-- ability to add other stuff
 '''
 
 import yaml
 
 class OpenAPISpec:
-    
+
     def __init__(self, file):
-    
+
         self.parsed_oas = yaml.load(file)
-    
+
         file.close
 
-    def delete_parameter(self, oas, name, type):
-        
-        for k in oas:
-            
-            if isinstance(oas[k], str):
-                pass
-            
-            elif isinstance(oas[k], dict):
-                self.delete_parameter(oas[k], name, type)
-                pass
+    def delete_parameter(self, name, type):
+        "This deletes parameter of given name and type"
 
-            elif ( isinstance(oas[k], list) ):
-                listlen = len(oas[k])
-                if listlen > 0:
-                    # make sure elements are dictionaries
-                    if isinstance(oas[k][0], dict):
-                        for i in oas[k]:
-                            if "name" in i.keys():
-                                if (i['name'] == name):
-                                    oas[k].remove(i)
+        #for path in oas['paths']:
+        for path in self.parsed_oas['paths']:
 
-        self.parsed_oas = oas
-    
+            valid_ops = ['get','put', 'post', 'delete', 'options', 'head', 'patch', 'trace']
+
+            for ops in self.parsed_oas['paths'][path]:
+                if ops in valid_ops:
+                    parameters = self.parsed_oas['paths'][path][ops]['parameters']
+                    
+                    for i, val in enumerate(parameters):
+                        if ( ( parameters[i]['name'] == name ) & ( parameters[i]['in'] == type ) ) :
+                            del self.parsed_oas['paths'][path][ops]['parameters'][i]
+
+        #self.parsed_oas = oas
+
+    def add_parameter(self, location):
+        "This add a parameter in a given location"
+        pass
+
     def dump(self):
+        "This returns itself as a yaml"
 
         return yaml.dump(self.parsed_oas)
