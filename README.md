@@ -24,3 +24,7 @@ Shows available commands and their options. Currently only 'delete' is supported
 $ py-oas-edit delete -H nameofheader input.yaml output.yaml
 
 Takes input.yaml, deletes all headers with name 'nameofheader' and writes the new contents to output.yaml. The input file is not affected.
+
+$ py-oas-edit delete -P nameofpath input.yaml output.yaml
+
+Takes input.yaml, deletes all paths with name 'nameofpath' and writes the new contents to output.yaml. The input file is not affected.
