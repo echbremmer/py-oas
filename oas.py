@@ -1,8 +1,7 @@
 ''' Class representing a oas/swagger file
 
-todo:
-- remove items related to headers: e.g. security definitions and security
-  within the operation itself
+This code is in very rudimentary state and requires some effort before it is in a usable
+state. Enjoy!
 '''
 
 import yaml
@@ -16,7 +15,14 @@ class OpenAPISpec:
         file.close
 
     def delete_parameter(self, name, type):
-        "This deletes parameter of given name and type"
+        '''This deletes parameter of given name and type"
+        
+        todo:
+            - remove items related to the parameter: two examples:
+                1) header may have (security) definition which must also be removed. 
+                2) path parameter is represented in the path itself (e.g. /somePath/{foo})
+                so this must be changed to /somePath
+        '''
 
         for path in self.parsed_oas['paths']:
 
@@ -31,12 +37,19 @@ class OpenAPISpec:
                             del self.parsed_oas['paths'][path][ops]['parameters'][i]
 
     def add_parameter(self, path, operation, content):
-        "This adds a parameter in a given location"
+        '''This adds a parameter in a given location
 
-        currentparams = self.parsed_oas['paths'][path][operation]['parameters']
-        #print(currentparams)
-        
-        self.parsed_oas['paths'][path][operation]['parameters'].append(content.read())
+        todo:
+            - prevent adding a parameter that is already present
+            - check whether location is valid in the input yaml
+            - add validation on the given content to ensure that it is valid oas spec for 
+            the content it represents (e.g. a header, path or query)
+            - ico adding path parameter we must also update the actual path value so adding 
+            path paramter 'foo' means  we must add {foo} to the path: /somePath/{foo} 
+        '''
+
+        parsed = yaml.load(content)
+        self.parsed_oas['paths'][path][operation]['parameters'].append(parsed)
 
 
     def dump(self):
