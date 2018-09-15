@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a comment!
-INPUT_PATH="./files/"
-OUTPUT_PATH="./output/"
+INPUT_PATH="../files/"
+OUTPUT_PATH="../output/"
 
 if [ ! -d "${OUTPUT_PATH}" ]; then
 	  mkdir ${OUTPUT_PATH}

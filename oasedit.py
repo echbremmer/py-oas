@@ -24,9 +24,9 @@ def cli(config, verbose):
 @click.argument('output', type=click.File('w'))
 @pass_config
 def delete(config, header, path, query, cookie, input, output):
-    '''Delete parameters from swagger file'''
+    '''Delete parameters from oas/swagger file'''
     
-    #print('verbose mode: ', pass_config.verbose)
+    # print('verbose mode: ', pass_config.verbose)
     s = oas.OpenAPISpec(input)    
         
     if (header):
@@ -39,3 +39,25 @@ def delete(config, header, path, query, cookie, input, output):
         s.delete_parameter(cookie, 'cookie')
 
     click.echo(s.dump(), output)
+
+@cli.command()
+@click.option('--path', '-p', help='Specify location')
+@click.option('--operation', '-o', help='Specify operation')
+@click.argument('content', type=click.File('r'))
+@click.argument('input', type=click.File('r'))
+@click.argument('output', type=click.File('w'))
+@pass_config
+def addparam(config, path, operation, content, input, output):
+
+    '''Adds parameter to oas/swagger file'''
+    
+    # print('verbose mode: ', pass_config.verbose)
+    s = oas.OpenAPISpec(input)    
+    
+    if (path):
+        # check validity of content specification
+        print("gonna add parameter")
+        s.add_parameter(path, operation, content)
+    
+    click.echo(s.dump(), output)
+

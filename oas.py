@@ -18,7 +18,6 @@ class OpenAPISpec:
     def delete_parameter(self, name, type):
         "This deletes parameter of given name and type"
 
-        #for path in oas['paths']:
         for path in self.parsed_oas['paths']:
 
             valid_ops = ['get','put', 'post', 'delete', 'options', 'head', 'patch', 'trace']
@@ -31,11 +30,14 @@ class OpenAPISpec:
                         if ( ( parameters[i]['name'] == name ) & ( parameters[i]['in'] == type ) ) :
                             del self.parsed_oas['paths'][path][ops]['parameters'][i]
 
-        #self.parsed_oas = oas
+    def add_parameter(self, path, operation, content):
+        "This adds a parameter in a given location"
 
-    def add_parameter(self, location):
-        "This add a parameter in a given location"
-        pass
+        currentparams = self.parsed_oas['paths'][path][operation]['parameters']
+        #print(currentparams)
+        
+        self.parsed_oas['paths'][path][operation]['parameters'].append(content.read())
+
 
     def dump(self):
         "This returns itself as a yaml"

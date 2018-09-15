@@ -21,6 +21,11 @@
 *.tar
 *.zip
 
+# Packages #
+############
+venv/*
+Open_API_specification_editor.egg-info/*
+
 # Logs and databases #
 ######################
 *.log
