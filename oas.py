@@ -10,7 +10,7 @@ class OpenAPISpec:
 
     def __init__(self, file):
 
-        self.parsed_oas = yaml.load(file)
+        self.parsed_oas = yaml.safe_load(file)
 
         file.close
 
@@ -55,4 +55,4 @@ class OpenAPISpec:
     def dump(self):
         "This returns itself as a yaml"
 
-        return yaml.dump(self.parsed_oas)
+        return yaml.safe_dump(self.parsed_oas)
