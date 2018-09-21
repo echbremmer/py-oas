@@ -54,10 +54,8 @@ class OpenAPISpec: # maybe call this OAS
             else:
                 return False
         else:
-            print("gonna return false; will i stop?")
             return False
         
-        print("nope; going strong")
         for e in ELEMENTS:
             if e in parsed_yaml:
                 pass
@@ -84,7 +82,7 @@ class OpenAPISpec: # maybe call this OAS
 
 
                 for ops in self.parsed_oas['paths'][path]:
-                    if ops in OPERATIONS:
+                    if ops in OpenAPISpec.OPERATIONS:
                         parameters = self.parsed_oas['paths'][path][ops]['parameters']
                         for i, val in enumerate(parameters):
                             if ('name' in val.keys() ):

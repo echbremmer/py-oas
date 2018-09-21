@@ -8,7 +8,7 @@ if [ ! -d "${OUTPUT_PATH}" ]; then
 	  echo "*" > ${OUTPUT_PATH}.gitignore
 fi
 
-oas-edit delete -H lksjdlfkjds ${INPUT_PATH}petstore.yaml ${OUTPUT_PATH}output_parsed.yaml
+oas-edit parse ${INPUT_PATH}petstore.yaml ${OUTPUT_PATH}output_parsed.yaml
 oas-edit delete $1 $2 ${INPUT_PATH}petstore.yaml ${OUTPUT_PATH}output_removed.yaml
 
 #echo "Elements removed from input YAML: "

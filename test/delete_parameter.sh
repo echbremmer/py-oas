@@ -1,6 +1,13 @@
 #!/bin/sh
 # This is a comment!
 
+echo "----------- START -----------"
+bash "$(./delete.sh -H body)"
+echo "----------- TEST ------------"
 bash "$(./delete.sh -H api_key)"
-bash "$(./delete.sh -P petId)"
+echo "----------- TEST ------------"
+bash "$(./delete.sh -H body)"
+echo "----------- TEST ------------"
+bash "$(./delete.sh -H somethingmissing)"
+echo "----------- END  ------------"
 
