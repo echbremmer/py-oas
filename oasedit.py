@@ -22,8 +22,11 @@ def cli(config, verbose):
 def parse(config, input, output):
     '''Only parse the oas/swagger file'''
 
-    s = oas.OpenAPISpec(input)
-
+    try:
+        s = oas.OpenAPISpec(input)
+        click.echo(s.dump(), output)
+    except ValueError as err:
+        click.echo('Error occured: %s' % err)
 
 @cli.command()
 @click.option('--header', '-H', help='Specify a header name') 

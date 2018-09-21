@@ -6,7 +6,7 @@ state. Enjoy!
 
 import yaml
 
-class OpenAPISpec:
+class OpenAPISpec: # maybe call this OAS
     
     SWAGGER_ELEMENTS = ['swagger', 'info', 'paths']
     OAS_ELEMENTS = ['openapi', 'info', 'paths']
@@ -21,8 +21,8 @@ class OpenAPISpec:
 
             self.parsed_oas = parsed_yaml
 
-            if 'version' in self.parsed_oas:
-                self.version = self.parsed_oas['version']
+            if 'swagger' in self.parsed_oas:
+                self.version = self.parsed_oas['swagger']
             elif 'openapi' in self.parsed_oas:
                 self.version = self.parsed_oas['openapi']
             else:
@@ -43,24 +43,28 @@ class OpenAPISpec:
             root is checked to contain mandatory elements
         '''
 
-        # add simple json validator as first step
-
         if 'swagger' in parsed_yaml:
             if parsed_yaml['swagger'] == '2.0':
-                ELEMENTS = SWAGGER_ELEMENTS
+                ELEMENTS = OpenAPISpec.SWAGGER_ELEMENTS
+            else:
+                return False
         elif 'openapi' in parsed_yaml:
             if parsed_yaml['openapi'] == '3.0.0': # replace with regex
-                ELEMENTS = OAS2_ELEMENTS
+                ELEMENTS = OpenAPISpec.OAS2_ELEMENTS
+            else:
+                return False
         else:
-            return false
-
+            print("gonna return false; will i stop?")
+            return False
+        
+        print("nope; going strong")
         for e in ELEMENTS:
             if e in parsed_yaml:
                 pass
             else:
-                return false
+                return False
 
-        return true
+        return True
 
     def delete_parameter(self, name, type):
         '''This deletes parameter of given name and type
