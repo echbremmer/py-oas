@@ -23,6 +23,7 @@
 
 # Packages #
 ############
+test/tryouts/*
 venv/*
 Open_API_specification_editor.egg-info/*
 

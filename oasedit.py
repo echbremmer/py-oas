@@ -16,14 +16,23 @@ def cli(config, verbose):
     pass
 
 @cli.command()
+@click.argument('input', type=click.File('r'))
+@click.argument('output', type=click.File('w'))
+@pass_config
+def parse(config, input, output):
+    '''Only parse the oas/swagger file'''
+
+    s = oas.OpenAPISpec(input)
+
+
+@cli.command()
 @click.option('--header', '-H', help='Specify a header name') 
-@click.option('--path', '-P', help='Specify a path name')
 @click.option('--query', '-Q', help='Specify a query name')
 @click.option('--cookie', '-C', help='Specify a cookie name')
 @click.argument('input', type=click.File('r'))
 @click.argument('output', type=click.File('w'))
 @pass_config
-def delete(config, header, path, query, cookie, input, output):
+def delete(config, header, query, cookie, input, output):
     '''Delete parameters from oas/swagger file'''
     
     # print('verbose mode: ', pass_config.verbose)
@@ -31,8 +40,6 @@ def delete(config, header, path, query, cookie, input, output):
         
     if (header):
         s.delete_parameter(header, 'header')
-    elif (path):
-        s.delete_parameter(path, 'path')
     elif (query):
         s.delete_parameter(query, 'query')
     elif (cookie):

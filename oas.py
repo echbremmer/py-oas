@@ -7,34 +7,87 @@ state. Enjoy!
 import yaml
 
 class OpenAPISpec:
+    
+    SWAGGER_ELEMENTS = ['swagger', 'info', 'paths']
+    OAS_ELEMENTS = ['openapi', 'info', 'paths']
+    OPERATIONS = ['get','put', 'post', 'delete', 'options', 'head', 'patch', 'trace']
 
     def __init__(self, file):
 
-        self.parsed_oas = yaml.safe_load(file)
-
+        parsed_yaml = yaml.safe_load(file) # should add try/catch here
         file.close
 
+        if (OpenAPISpec.validate(parsed_yaml)):
+
+            self.parsed_oas = parsed_yaml
+
+            if 'version' in self.parsed_oas:
+                self.version = self.parsed_oas['version']
+            elif 'openapi' in self.parsed_oas:
+                self.version = self.parsed_oas['openapi']
+            else:
+                raise ValueError('File does not contain version')
+        else:
+            raise ValueError('File not a valid Swagger or Open Api Specification')
+
+    @staticmethod
+    def validate(parsed_yaml):
+        ''' This method validates a parsed yaml file to ensure it is a valid
+        swagger 2.0 or OAS 2.*.* OAS 3.0.0
+
+        todo:
+            - replace this with more mature python library for swagger/oas to do
+            the validation. This class can extend that library by adding operations
+            such as deleting or adding things
+            - if nothing available then more thorough validation; currently only 
+            root is checked to contain mandatory elements
+        '''
+
+        # add simple json validator as first step
+
+        if 'swagger' in parsed_yaml:
+            if parsed_yaml['swagger'] == '2.0':
+                ELEMENTS = SWAGGER_ELEMENTS
+        elif 'openapi' in parsed_yaml:
+            if parsed_yaml['openapi'] == '3.0.0': # replace with regex
+                ELEMENTS = OAS2_ELEMENTS
+        else:
+            return false
+
+        for e in ELEMENTS:
+            if e in parsed_yaml:
+                pass
+            else:
+                return false
+
+        return true
+
     def delete_parameter(self, name, type):
-        '''This deletes parameter of given name and type"
-        
+        '''This deletes parameter of given name and type
+
         todo:
             - remove items related to the parameter: two examples:
                 1) header may have (security) definition which must also be removed. 
-                2) path parameter is represented in the path itself (e.g. /somePath/{foo})
-                so this must be changed to /somePath
+                2) removal of path parameter is not supported in this class since it has 
+                too many related things (like the path itself which contains the path 
+                paramter: /somePath/{foo} )
         '''
 
-        for path in self.parsed_oas['paths']:
+        SUPPORTED_TYPES = ['header', 'query', 'cookie']
 
-            valid_ops = ['get','put', 'post', 'delete', 'options', 'head', 'patch', 'trace']
+        if type in SUPPORTED_TYPES:
+            for path in self.parsed_oas['paths']:
 
-            for ops in self.parsed_oas['paths'][path]:
-                if ops in valid_ops:
-                    parameters = self.parsed_oas['paths'][path][ops]['parameters']
-                    
-                    for i, val in enumerate(parameters):
-                        if ( ( parameters[i]['name'] == name ) & ( parameters[i]['in'] == type ) ) :
-                            del self.parsed_oas['paths'][path][ops]['parameters'][i]
+
+                for ops in self.parsed_oas['paths'][path]:
+                    if ops in OPERATIONS:
+                        parameters = self.parsed_oas['paths'][path][ops]['parameters']
+                        for i, val in enumerate(parameters):
+                            if ('name' in val.keys() ):
+                                if ( ( parameters[i]['name'] == name ) & ( parameters[i]['in'] == type ) ) :
+                                    del self.parsed_oas['paths'][path][ops]['parameters'][i]
+        else:
+            raise ValueError('Provided type is not supported: ', type)
 
     def add_parameter(self, path, operation, content):
         '''This adds a parameter in a given location
@@ -47,8 +100,10 @@ class OpenAPISpec:
             - ico adding path parameter we must also update the actual path value so adding 
             path paramter 'foo' means  we must add {foo} to the path: /somePath/{foo} 
         '''
-
         parsed = yaml.load(content)
+
+        # there should be operations but validation method is weak.
+
         self.parsed_oas['paths'][path][operation]['parameters'].append(parsed)
 
 
