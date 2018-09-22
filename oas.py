@@ -80,8 +80,6 @@ class OpenAPISpec: # maybe call this OAS
 
         if type in SUPPORTED_TYPES:
             for path in self.parsed_oas['paths']:
-
-
                 for ops in self.parsed_oas['paths'][path]:
                     if ops in OpenAPISpec.OPERATIONS:
                         parameters = self.parsed_oas['paths'][path][ops]['parameters']

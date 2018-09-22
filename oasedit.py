@@ -70,7 +70,6 @@ def addparam(config, path, operation, content, input, output):
     s = oas.OpenAPISpec(input)
     
     if(path):
-        print("gonna add content")
         try:
             s.add_parameter(path, operation, content)
         except error.OASError as err:
