@@ -1,5 +1,5 @@
 import click
-import oas
+from oas import oas
 
 class Config(object):
     
@@ -39,33 +39,34 @@ def delete(config, header, query, cookie, input, output):
     '''Delete parameters from oas/swagger file'''
     
     # print('verbose mode: ', pass_config.verbose)
-    s = oas.OpenAPISpec(input)    
-        
-    if (header):
-        s.delete_parameter(header, 'header')
-    elif (query):
-        s.delete_parameter(query, 'query')
-    elif (cookie):
-        s.delete_parameter(cookie, 'cookie')
+    try:
+        s = oas.OpenAPISpec(input)
+        if (header):
+            s.delete_parameter(header, 'header')
+        elif (query):
+            s.delete_parameter(query, 'query')
+        elif (cookie):
+            s.delete_parameter(cookie, 'cookie')
 
-    click.echo(s.dump(), output)
+        click.echo(s.dump(), output)
+    except ValueError as err:
+        click.echo('Error occured: %s' % err)
 
 @cli.command()
-@click.option('--path', '-p', help='Specify location')
-@click.option('--operation', '-o', help='Specify operation')
+#@click.option('--path', '-p', help='Specify location') # whether path is already in content
+#@click.option('--operation', '-o', help='Specify operation') # whether operation is in content
 @click.argument('content', type=click.File('r'))
 @click.argument('input', type=click.File('r'))
 @click.argument('output', type=click.File('w'))
 @pass_config
-def addparam(config, path, operation, content, input, output):
+def addparam(config, content, input, output):
 
     '''Adds parameter to oas/swagger file'''
     
     # print('verbose mode: ', pass_config.verbose)
-    s = oas.OpenAPISpec(input)    
+    s = oas.OpenAPISpec(input, verbose)
     
     if (path):
-        # check validity of content specification
         print("gonna add parameter")
         s.add_parameter(path, operation, content)
     

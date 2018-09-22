@@ -5,7 +5,6 @@ state. Enjoy!
 '''
 
 import yaml
-import oaserror
 
 class OpenAPISpec: # maybe call this OAS
     
