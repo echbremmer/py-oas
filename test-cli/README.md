@@ -9,7 +9,8 @@ Test using a correctly formatted input swagger and correct arguments. Swagger fi
 ## Examples
 $ ./delete_parameter.sh   
 $ ./add_parameter.sh   
-or to test using a specific input
+
+Or to test using a specific input use:
 
 $ ./delete.sh -H name_of_header   
 $ ./add -p /pet/findByStatus -o get   
