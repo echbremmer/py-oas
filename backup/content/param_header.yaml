@@ -1,4 +1,0 @@
-name: "testHeader"
-in: "header"
-required: false
-type: "string"
