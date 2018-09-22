@@ -101,9 +101,11 @@ class OpenAPISpec: # maybe call this OAS
 
         todo:
             - prevent adding a parameter that is already present
+            - throw error when trying to add 'path' parameter since it will cause an invalid
+            swagger/oas file if the name of paramter is not added to the path (i.e. in case 
+            of path parameter 'petId' the path should be updated to be '/pet/{petId}'
             - add validation on the given content to ensure that it is valid oas spec for
             the content it represents (e.g. a header, path or query)
-            path paramter 'foo' means  we must add {foo} to the path: /somePath/{foo}
         '''
         parameter_parsed = yaml.load(parameter)
 
@@ -119,7 +121,7 @@ class OpenAPISpec: # maybe call this OAS
 
         temp_oas['paths'][path][operation]['parameters'].append(parameter_parsed)
 
-        if(self.validate(temp_oas)):
+        if(self.validate(temp_oas)): # current validation is not sufficient
             self.parsed_oas = temp_oas
         else:
             raise error.OASError('Provided parameter not according to open api specification')
