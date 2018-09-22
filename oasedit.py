@@ -1,5 +1,5 @@
 import click
-from oas import oas
+from classes import oas
 
 class Config(object):
     
