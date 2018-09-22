@@ -1,0 +1,3 @@
+name: "testHeader"
+required: false
+type: "string"
