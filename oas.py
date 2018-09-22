@@ -3,11 +3,12 @@
 This code is in very rudimentary state and requires some effort before it is in a usable
 state. Enjoy!
 '''
+import error
 
 import yaml
 
 class OpenAPISpec: # maybe call this OAS
-    
+
     SWAGGER_ELEMENTS = ['swagger', 'info', 'paths']
     OAS_ELEMENTS = ['openapi', 'info', 'paths']
     OPERATIONS = ['get','put', 'post', 'delete', 'options', 'head', 'patch', 'trace']
@@ -26,9 +27,9 @@ class OpenAPISpec: # maybe call this OAS
             elif 'openapi' in self.parsed_oas:
                 self.version = self.parsed_oas['openapi']
             else:
-                raise ValueError('File does not contain version')
+                raise error.OASError('File does not contain version')
         else:
-            raise ValueError('File not a valid Swagger or Open Api Specification')
+            raise error.OASError('File not a valid Swagger or Open Api Specification')
 
     @staticmethod
     def validate(parsed_yaml):
@@ -89,9 +90,15 @@ class OpenAPISpec: # maybe call this OAS
                                 if ( ( parameters[i]['name'] == name ) & ( parameters[i]['in'] == type ) ) :
                                     del self.parsed_oas['paths'][path][ops]['parameters'][i]
         else:
-            raise ValueError('Provided type is not supported: ', type)
+            raise error.OASError('Provided type is not supported in Swagger or OAS:: ', type)
 
-    def add_parameter(self, path, operation, content):
+    def add_path(self, path):
+        pass
+
+    def add_operation(self, path, operation):
+        pass
+
+    def add_parameter(self, path, operation, parameter):
         '''This adds a parameter in a given location
 
         todo:
@@ -100,12 +107,24 @@ class OpenAPISpec: # maybe call this OAS
             the content it represents (e.g. a header, path or query)
             path paramter 'foo' means  we must add {foo} to the path: /somePath/{foo}
         '''
-        parsed = yaml.load(content)
+        parameter_parsed = yaml.load(parameter)
+
+        temp_oas = self.parsed_oas
+
+        if path not in self.parsed_oas['paths']:
+            raise error.OASError('Specified path does not exist')
+        elif operation not in self.parsed_oas['paths'][path]:
+            raise error.OASError('Specified operation does not exist')
 
         if 'parameters' not in self.parsed_oas['paths'][path][operation]:
-            self.parsed_oas['paths'][path][operation]['parameters'] = []
+            temp_oas['paths'][path][operation]['parameters'] = []
 
-        self.parsed_oas['paths'][path][operation]['parameters'].append(parsed)
+        temp_oas['paths'][path][operation]['parameters'].append(parameter_parsed)
+
+        if(self.validate(temp_oas)):
+            self.parsed_oas = temp_oas
+        else:
+            raise error.OASError('Provided parameter not according to open api specification')
 
     def dump(self):
         "This returns itself as a yaml"
