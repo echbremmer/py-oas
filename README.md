@@ -1,8 +1,8 @@
 # py-oas
-Python library for editing oas/swagger specifications.
+Python library and cli for editing oas/swagger specifications.
 
-This repository also includes simple CLI that that takes a 
-oas or swagger as input and removes specified elements.
+The CLI teakes a swagger or Open Api Specification file as input 
+and removes specified elements.
 
 # Install
 
@@ -13,7 +13,6 @@ $ virtualenv venv
 $ source venv/bin/activate  
 (venv) $ pip install pyyaml  
 (venv) $ pip install --editable .  
-
 
 # CLI examples
 
