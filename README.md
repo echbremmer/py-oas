@@ -1,8 +1,8 @@
 # py-oas
-Python library for editing oas/swagger specifications.
+Python library and cli for editing oas/swagger specifications.
 
-This repository also includes simple CLI that that takes a 
-oas or swagger as input and removes specified elements.
+The CLI teakes a swagger or Open Api Specification file as input 
+and removes specified elements.
 
 # Install
 
@@ -25,4 +25,4 @@ Takes input.yaml, deletes all headers with name 'nameofheader' and writes the ne
 
 $ oas-edit add -P /some/path -O post parameter.yaml input.yaml output.yaml
 
-Takes input.yaml and adds the content of parameter.yaml in paths:/some/path:get. Note that there is no validation on the content of parameter.yaml so make sure it is correct. Ico errors in the parameter.yaml the output.yaml will not be a valid swagger/oas. 
+Takes input.yaml and adds the content of parameter.yaml in paths:/some/path:get. Note that there is no validation on the content of parameter.yaml so make sure it is correct. Ico errors in the parameter.yaml the output.yaml will not be a valid swagger/oas.
