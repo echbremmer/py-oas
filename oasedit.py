@@ -56,8 +56,8 @@ def delete(config, header, query, cookie, input, output):
         click.echo('Error occured: %s' % err)
 
 @cli.command()
-@click.option('--path', '-p', help='Specify location')
-@click.option('--operation', '-o', help='Specify operation')
+@click.option('--path', '-P', help='Specify location')
+@click.option('--operation', '-O', help='Specify operation')
 @click.argument('content', type=click.File('r'))
 @click.argument('input', type=click.File('r'))
 @click.argument('output', type=click.File('w'))
