@@ -3,4 +3,4 @@
 
 echo "----------- START -----------"
 echo "----------- TEST1 -----------"
-(./add.sh -p '/pet/findByStatus' -o get)
+(./add.sh -P '/pet/findByStatus' -O get)
