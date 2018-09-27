@@ -8,9 +8,7 @@ import error
 import yaml
 
 class OpenAPISpec: # maybe call this OAS
-
-    SWAGGER_ELEMENTS = ['swagger', 'info', 'paths']
-    OAS_ELEMENTS = ['openapi', 'info', 'paths']
+    
     OPERATIONS = ['get','put', 'post', 'delete', 'options', 'head', 'patch', 'trace']
 
     def __init__(self, file):
@@ -18,52 +16,10 @@ class OpenAPISpec: # maybe call this OAS
         parsed_yaml = yaml.safe_load(file) # should add try/catch here
         file.close
 
-        if (OpenAPISpec.validate(parsed_yaml)):
-
-            self.parsed_oas = parsed_yaml
-
-            if 'swagger' in self.parsed_oas:
-                self.version = self.parsed_oas['swagger']
-            elif 'openapi' in self.parsed_oas:
-                self.version = self.parsed_oas['openapi']
-            else:
-                raise error.OASError('File does not contain version')
-        else:
-            raise error.OASError('File not a valid Swagger or Open Api Specification')
-
-    @staticmethod
-    def validate(parsed_yaml):
-        ''' This method validates a parsed yaml file to ensure it is a valid
-        swagger 2.0 or OAS 2.*.* OAS 3.0.0
-
-        todo:
-            - replace this with more mature python library for swagger/oas to do
-            the validation. This class can extend that library by adding operations
-            such as deleting or adding things
-            - if nothing available then more thorough validation; currently only 
-            root is checked to contain mandatory elements
-        '''
-
-        if 'swagger' in parsed_yaml:
-            if parsed_yaml['swagger'] == '2.0':
-                ELEMENTS = OpenAPISpec.SWAGGER_ELEMENTS
-            else:
-                return False
-        elif 'openapi' in parsed_yaml:
-            if parsed_yaml['openapi'] == '3.0.0': # replace with regex
-                ELEMENTS = OpenAPISpec.OAS2_ELEMENTS
-            else:
-                return False
-        else:
-            return False
-        
-        for e in ELEMENTS:
-            if e in parsed_yaml:
-                pass
-            else:
-                return False
-
-        return True
+        try:
+            Validator.validate(parsed_yaml, Validator.determine_version(parsed_yaml))
+        except OASError:
+            raise error.OASError('File not valid swagger')
 
     def delete_parameter(self, name, type):
         '''This deletes parameter of given name and type
@@ -130,3 +86,82 @@ class OpenAPISpec: # maybe call this OAS
         "This returns itself as a yaml"
 
         return yaml.safe_dump(self.parsed_oas)
+
+class Validator(yaml, version):
+
+    SWAGGER_ELEMENTS = ['swagger', 'info', 'paths']
+    OAS_ELEMENTS = ['openapi', 'info', 'paths']
+
+    def validate(yaml):
+        ''' This method validates a parsed yaml file to ensure it is a valid
+        swagger 2.0 or OAS 2.*.* OAS 3.0.0. In case of a valid specfication it
+        will return the version
+
+        todo:
+            - improve to fully validate yaml against the open api specification.
+        '''
+
+        try:
+            version = OpenAPISpec.determine_version(yaml)
+        except OASError:
+            raise error.OASError('File not valid')
+
+        # confirm fixed elements occur
+        for e in ELEMENTS:
+            if e in yaml:
+                pass
+            else:
+                return false
+
+        # for all optional elements check validity
+
+        if servers in yaml:
+            if(validate_servers(yaml['servers'], version)):
+                pass
+            else:
+                return false
+        if components in yaml:
+            validate_components(yaml['components'], version)
+        if security in yaml:
+            validate_security(yaml['security'], version)
+        if tags in yaml:
+            validate_tags(yamls['tags'], version)
+
+        if externalDocs in yaml:
+            validate_externalDocs(yaml['externalDocs'], version)
+
+        # traverse all the element
+
+    def determine_version(yaml):
+
+        if 'swagger' in yaml:
+            if yaml['swagger'] == '2.0':
+                ELEMENTS = OpenAPISpec.SWAGGER_ELEMENTS
+            else:
+                version = yaml['swagger']
+        elif 'openapi' in yaml:
+            if yaml['openapi'] == '3.0.0': # replace with regex
+                ELEMENTS = OpenAPISpec.OAS2_ELEMENTS
+            else:
+                version = yaml['openapi']
+        else:
+            raise error.OASError('File not a valid Swagger or Open Api Specification')
+
+    def validate_info(yaml, version):
+        pass
+
+    def validate_paths(yaml, version):
+        pass
+
+    def validate_servers(yaml, version):
+        pass
+
+    def validate_components(yaml, version):
+        pass
+
+    def validate_tags(yaml, version):
+        pass
+
+    def validate_externalDocs(yaml, version):
+        pass
+
